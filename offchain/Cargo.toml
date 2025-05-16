@@ -1,62 +1,47 @@
 [package]
-name = "client"
+name = "solana-vntr-sniper"
 version = "0.1.0"
 edition = "2021"
 
-[lib]
-name = "client"
-path = "src/lib.rs"
-
-[[bin]]
-name = "main"
-path = "src/main.rs"
-
-[[bin]]
-name = "tmp"
-path = "src/tmp.rs"
-
-[[bin]]
-name = "setup_ata"
-path = "src/setup/setup_ata.rs"
-
-[[bin]]
-name = "setup_open_orders"
-path = "src/setup/setup_open_orders.rs"
-
 [dependencies]
-solana-sdk = "1.9.9"
-anchor-spl = { version = "0.22.1", features = ["dex"] }
-anchor-client = { version = "0.22.0", features = ["debug"] }
-anchor-lang = "0.22.0"
-tmp = { path = "../program/programs/tmp", features = ["no-entrypoint"]}
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-spl-math = { version = "0.1", features = [ "no-entrypoint" ] }
-anyhow = "1.0.55"
-rayon = "1.5.1"
-ordered-float = "2.10.0"
-uint = "0.8"
-arrayref = "0.3.6"
-num_enum = "0.5.4" 
-clap = { version = "3.1.6", features = ["derive"] }
-enum_dispatch = "0.3.7"
-num-derive = "0.3"
-num-traits = "0.2"
-solana-program = "1.9.9"
-spl-token = { version = "3.1.1", features = [ "no-entrypoint" ] }
-thiserror = "1.0"
-arbitrary = { version = "1.0", features = ["derive"], optional = true }
-roots = { version = "0.0.7", optional = true }
-log = "0.4"
-env_logger = "0.9.0"
-indicatif = "0.16.2"
-sha2 = "0.10.2"
-dyn-clone = "1.0"
-lazy_static = "1.4.0"
-
-[dev-dependencies]
-solana-sdk = "1.9.9"
-proptest = "1.0"
-roots = "0.0.7"
-
-[workspace]
+solana-client = { version = "2.1.14" }
+solana-account-decoder = "2.1.14"
+dotenv = "0.15"
+chrono = "0.4.26"
+clap = { version = "4.5.7", features = ["derive"] }
+anyhow = "1.0.62"
+serde = "1.0.145"
+serde_json = "1.0.86"
+tokio = { version = "1.21.2", features = ["full"] }
+tokio-tungstenite = { version = "0.23.1", features = ["native-tls"] }
+tokio-stream = "0.1.11"
+anchor-client = { version = "0.31.0", features = ["async"] }
+anchor-lang = "=0.31.0"
+yellowstone-grpc-client = "4.1.0"
+yellowstone-grpc-proto = "4.1.1"
+spl-token = { version = "4.0.0", features = ["no-entrypoint"] }
+spl-token-2022 = { version = "6.0.0", features = ["no-entrypoint"] }
+spl-associated-token-account = { version = "6.0.0", features = [
+    "no-entrypoint",
+] }
+spl-token-client = "0.13.0"
+base64 = "0.13"
+rand = "0.8.5"
+borsh = { version = "1.5.3"}
+borsh-derive = "1.5.3"
+colored = "3.0.0"
+reqwest = { version = "0.11.27", features = ["json", "socks", "native-tls"] }
+lazy_static = "1.5.0"
+once_cell = "1.19.0"
+bs58 = "0.4"
+bs64 = "0.1.2"
+bincode = "1.3.3"
+tokio-js-set-interval = "1.3.0"
+bytemuck = "1.21.0"
+indicatif = "0.17.8"
+tracing = "0.1.40"
+futures-util = "0.3.30"
+maplit = "1.0.2"
+jito-json-rpc-client = { git = "https://github.com/jwest951227/jito-block-engine-json-rpc-client.git", branch="v2.1.1", package = "jito-block-engine-json-rpc-client" }
+futures = "0.3.31"
+teloxide = { version = "0.12", features = ["macros"] }
