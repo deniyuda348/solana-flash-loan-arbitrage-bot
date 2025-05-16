@@ -10,5 +10,4 @@ pub mod stable;
 
 // pool specific details 
 pub mod orca;
-pub mod raydium;
 pub mod serum;

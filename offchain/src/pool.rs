@@ -17,11 +17,10 @@ pub struct PoolDir {
 #[derive(Debug)]
 pub enum PoolType {
     OrcaPoolType,
-    RaydiumType,
-    MeteoraType,
-    PhoenixType,
-    LifinityType,
-    JupiterType,
+    MercurialPoolType,
+    SaberPoolType,
+    AldrinPoolType,
+    SerumPoolType,
 }
 
 pub fn pool_factory(tipe: &PoolType, json_str: &String) -> Box<dyn PoolOperations> {
@@ -30,16 +29,20 @@ pub fn pool_factory(tipe: &PoolType, json_str: &String) -> Box<dyn PoolOperation
             let pool: OrcaPool = serde_json::from_str(json_str).unwrap();
             Box::new(pool)
         }
-        PoolType::RaydiumType => {
-            let pool: RaydiumPool = serde_json::from_str(json_str).unwrap();
+        PoolType::MercurialPoolType => {
+            let pool: MercurialPool = serde_json::from_str(json_str).unwrap();
+            Box::new(pool)
+        }
+        PoolType::SaberPoolType => {
+            let pool: SaberPool = serde_json::from_str(json_str).unwrap();
+            Box::new(pool)
+        }
+        PoolType::AldrinPoolType => {
+            let pool: AldrinPool = serde_json::from_str(json_str).unwrap();
             Box::new(pool)
         }
         PoolType::SerumPoolType => {
             let pool: SerumPool = serde_json::from_str(json_str).unwrap();
-            Box::new(pool)
-        }
-        PoolType::JupiterPoolType => {
-            let pool: JupiterPool = serde_json::from_str(json_str).unwrap();
             Box::new(pool)
         }
     }
