@@ -92,7 +92,7 @@ routePlan ( 4 * n)
 ```
 
 ## jito bundle and flash loan
-![image](https://github.com/user-attachments/assets/a95f0e26-bd31-4a22-8ea2-2005e740dc95)
+
 
 
 ## On-Chain Arbitrage Limitations
