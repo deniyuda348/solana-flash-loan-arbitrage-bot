@@ -1,99 +1,13 @@
-## ✨[[📞💻]](https://t.me/j292885)
+## 👉👉👉📞💻(https://t.me/deni53532133221 )  Don't take this document lightly.
+# Solana Flash Loan Arbitrage Bot
 
-# Solana Arbitrage Bot Architecture
+## Overview
+This Solana Arbitrage Bot implements advanced strategies for detecting and executing profitable trading opportunities across multiple Solana DEXs including Raydium, Orca (Whirlpool), Meteora, and Jupiter, with optional integration for Jito-MEV. Visulize about logic and architecture diagram.
 
 This is solana flash loan arbitrage bot transaction.(https://solscan.io/tx/2BK4cMrPpmFPDbvwqTWV4Gqgt3Z7hmfi7eszphgdxHAppUVNSWN7uRLnVv6SR82NskUxhK8vdyEEgQGmmQa3MvqH)
-
-
-```
- Message: Message { 
- header: MessageHeader { 
-    num_required_signatures: 1, 
-    num_readonly_signed_accounts: 0, 
-    num_readonly_unsigned_accounts: 8 
-    }, 
-    account_keys: 
-    [
-    ArbBen647Mho7r2f1R3bvxxytD1dG64jUVdfSMu2KC5n, KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD, XyKGYgfXDAMx8ejD3jAWvQ9o5r9QjGkvzwVU8DPuRXh, 5AFoToMbwKZcRmmBYpZwGFSVT8ihgUXLEwjrr5e9BbAc, 6Gck6T5ZUQJBjQeXuhHfLBPJwboJJUCV7y7Nu21vg58n, 7x4VcEX8aLd3kFsNWULTp1qFgVtDwyWSxpTGQkoMM6XX, CHm1EcpoGJXsJ3UgfD99jHdEJWwWeVSuzqDQtrR9YqEj, FnPDHaYMTJLSfdt8QgjSydPk7Y53QEFPuSvW1wsSZMXK, H1qQ6Hent1C5wa4Hc3GK2V1sgg4grvDBbmKd5H8dsTmo, HpeZijgUiz1QuVGShrHC7mJiiBuW9jMXgLQBSk6ndMfL, 
-    11111111111111111111111111111111, ComputeBudget111111111111111111111111111111, 
-    JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4, TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA, 2MFoS3MPtvyQ4Wh4M9pdfPjz6UhVoNbFbGJAskCPCj3h, 6U91aKa8pmMxkJwBCfPTmUEfZi6dHe7DcFq2ALvB2tbB, ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL, D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf
-    ], 
-    recent_blockhash: 9FJE2LXAq9ism5CvDogvNPYqgEyUDPTkijyeogp5w9K7,
-    instructions: [
-    CompiledInstruction { 
-    program_id_index: 1, 
-    accounts: [0, 38, 39, 31, 34, 29, 30, 32, 1, 1, 37, 13], 
-    data: [135, 231, 52, 167, 7, 52, 212, 193, 128, 150, 152, 0, 0, 0, 0, 0] }, 
-    CompiledInstruction 
-    { 
-    program_id_index: 11, 
-    accounts: [], 
-    data: [2, 192, 92, 21, 0] }, 
-    CompiledInstruction { 
-    program_id_index: 11, 
-    accounts: [], 
-    data: [3, 187, 59, 11, 0, 0, 0, 0, 0] 
-    }, 
-    CompiledInstruction { program_id_index: 10, accounts: [0, 30], data: [2, 0, 0, 0, 128, 150, 152, 0, 0, 0, 0, 0] }, 
-    CompiledInstruction {program_id_index: 13, accounts: [30], data: [17] }, 
-    CompiledInstruction { program_id_index: 16, accounts: [0, 7, 0, 36, 10, 13], data: [1] }, 
-    CompiledInstruction { program_id_index: 12, accounts: [13, 15, 0, 30, 5, 9, 7, 34, 36, 12, 12, 17, 12, 35, 13, 13, 33, 15, 22, 34, 36, 5, 21, 9, 23, 18, 19, 20, 24], data: [193, 32, 155, 51, 65, 214, 156, 129, 3, 1, 0, 0, 0, 47, 1, 0, 100, 0, 1, 128, 150, 152, 0, 0, 0, 0, 0, 149, 110, 206, 0, 0, 0, 0, 0, 50, 0, 0] }, 
-    CompiledInstruction { program_id_index: 12, accounts: [13, 14, 0, 7, 3, 8, 30, 36, 34, 12, 12, 17, 12, 35, 13, 13, 33, 14, 28, 34, 36, 8, 26, 3, 25, 2, 4, 6, 27], data: [193, 32, 155, 51, 65, 214, 156, 129, 1, 1, 0, 0, 0, 47, 0, 0, 100, 0, 1, 149, 110, 206, 0, 0, 0, 0, 0, 247, 96, 152, 0, 0, 0, 0, 0, 50, 0, 0] }, 
-    CompiledInstruction { program_id_index: 13, accounts: [30, 0, 0], data: [9] }, 
-    CompiledInstruction { program_id_index: 1, accounts: [0, 38, 39, 31, 34, 29, 30, 32, 1, 1, 37, 13], data: [185, 117, 0, 203, 96, 245, 180, 186, 128, 150, 152, 0, 0, 0, 0, 0, 0] 
-    }], 
-    address_table_lookups: [MessageAddressTableLookup { account_key: B1bQUTgTHTgjTkv3w6WpS7WuQSYeRrYjfYwmzt81LEAs, writable_indexes: [33, 37, 35, 73, 34, 36, 76], readonly_indexes: [2, 0, 9, 75] }, MessageAddressTableLookup { account_key: 2LWm7Z9ivLGipSnMeNsCJ3kFYwKu5J8JnWkgZeEgRVq5, writable_indexes: [225, 227, 216, 218], readonly_indexes: [] }, MessageAddressTableLookup { account_key: HrRvTCV6KqzbJZYsjssgudwBrjCAMzUje657s3LUAccc, writable_indexes: [5, 6, 3, 7], readonly_indexes: [10, 1, 2] }] 
-    }
-
-```
-
 flash loan transaction (https://solscan.io/tx/UjVogBra5oCpPkBHmDxbgev3BBUZrWteFSH3K6rGeJc12MPJjCnZc7WQNbg8NuuvXmQuT5Mi7RBCmk6syiPsnDn)
-```
-{ 
-header: MessageHeader { num_required_signatures: 1, num_readonly_signed_accounts: 0, num_readonly_unsigned_accounts: 1 }, 
-account_keys: [ArbBen647Mho7r2f1R3bvxxytD1dG64jUVdfSMu2KC5n, KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD, ComputeBudget111111111111111111111111111111], 
-recent_blockhash: AqPo9Bq3XpyokNNnwhAXvkNoqrNfgwKvofxTTNn9Zvv7, 
-instructions: 
-[
-     CompiledInstruction { program_id_index: 1, accounts: [0, 10, 11, 5, 7, 3, 4, 6, 1, 1, 9, 8], data: [135, 231, 52, 167, 7, 52, 212, 193, 128, 150, 152, 0, 0, 0, 0, 0] }, 
-     CompiledInstruction { program_id_index: 2, accounts: [], data: [2, 192, 92, 21, 0] }, 
-     CompiledInstruction { program_id_index: 2, accounts: [], data: [3, 204, 51, 6, 0, 0, 0, 0, 0] }, 
-     CompiledInstruction { program_id_index: 1, accounts: [0, 10, 11, 5, 7, 3, 4, 6, 1, 1, 9, 8], data: [185, 117, 0, 203, 96, 245, 180, 186, 128, 150, 152, 0, 0, 0, 0, 0, 0] }], 
-     address_table_lookups: [MessageAddressTableLookup { account_key: BcAgyPWo2qHofZeauab8ffJGau9YPFFhrYx3m4Qw2fNV, writable_indexes: [], readonly_indexes: [2, 4] }, 
-     MessageAddressTableLookup { account_key: HrRvTCV6KqzbJZYsjssgudwBrjCAMzUje657s3LUAccc, writable_indexes: [5, 6, 3, 7], readonly_indexes: [10, 1, 2] }] }
-```
-
-   ```
- A->B instruction data length: 40
- A->B discriminator: [229, 23, 203, 151, 122, 227, 173, 42]
- combined_swap:::::::[53, 82, 102, 76, 108, 51, 114, 106, 5, 0, 0, 0, 65, 1, 100, 0, 1, 42, 100, 1, 2, 20, 0, 100, 2, 3, 65, 0, 100, 3, 4, 64, 100, 4, 0, 0, 45, 49, 1, 0, 0, 0, 0, 1, 213, 47, 1, 0, 0, 0, 0, 50, 0, 0]
- combined_swap data length::::: 54
- combined_swap real data length[106, 5, 0, 0, 0, 65, 1, 100, 0, 1, 42, 100, 1, 2, 20, 0, 100, 2, 3, 65, 0, 100, 3, 4, 64, 100, 4, 0, 0, 45, 49, 1, 0, 0, 0, 0, 1, 213, 47, 1, 0, 0, 0, 0, 50, 0]
-   ```
-```
-
-[229, 23, 203, 151, 122, 227, 173, 42, 1, 0, 0, 0, 7, 100, 0, 1,                0, 45, 49, 1, 0, 0, 0, 0, 226, 245, 115, 5, 0, 0, 0, 0, 50, 0, 0](27)
-[229, 23, 203, 151, 122, 227, 173, 42, 2, 0, 0, 0, 7, 100, 0, 1, 42, 100, 1, 0, 0, 45, 49, 1, 0, 0, 0, 0, 47,  30,   48, 1, 0, 0, 0, 0, 50, 0, 0] (31) expected (27) +8 = 39/35
-
-platform fee_bps (1)
-0
-slippage_bps (2)
-50, 0,  
-quoted_out_amount (8)
-226, 245, 115, 5, 0, 0, 0, 0, 
-47,  30,  48,  1, 0, 0, 0, 0, 
-in_amount ( 8 )
-0, 45, 49, 1, 0, 0, 0, 0, 
-0, 45, 49, 1, 0, 0, 0, 0,
-routePlan ( 4 * n)
-1, 0, 0, 0, 7, 100, 0, 1,
- 2, 0, 0, 0, 7, 100, 0, 1, 42, 100, 1, 0,
-
-```
 
 ## jito bundle and flash loan
-
-
 
 ## On-Chain Arbitrage Limitations
 
@@ -130,10 +44,6 @@ The original implementation should be considered as educational material rather 
 - Integrate with MEV-aware infrastructure
 - Consider validator relationships for better transaction placement
 - Implement proper slippage and risk management
-
-## Overview
-
-This Solana Arbitrage Bot implements advanced strategies for detecting and executing profitable trading opportunities across multiple Solana DEXs including Raydium, Orca (Whirlpool), Meteora, and Jupiter, with optional integration for Jito-MEV. Visulize about logic and architecture diagram.
 
 ```mermaid
 graph TD
