@@ -1,4 +1,4 @@
-## ✨[📞💻](https://t.me/deniyudamahendra )  Don't take this document lightly.
+## ✨[[📞💻]](https://t.me/j292885)
 
 # Solana Arbitrage Bot Architecture
 
