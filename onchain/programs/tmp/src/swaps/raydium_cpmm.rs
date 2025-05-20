@@ -4,56 +4,49 @@ use anchor_spl::token::{Token, TokenAccount};
 
 use crate::error::ErrorCode;
 use crate::state::RaydiumSwapState;
+const AMM_CONFIG_OFFSET: usize = 8; // amm_config
+const POOL_CREATOR_OFFSET: usize = 40; // pool_creator
+const TOKEN_0_VAULT_OFFSET: usize = 72; // token_0_vault
+const TOKEN_1_VAULT_OFFSET: usize = 104; // token_1_vault
+const LP_MINT_OFFSET: usize = 136; // lp_mint
+const TOKEN_0_MINT_OFFSET: usize = 168; // token_0_mint
+const TOKEN_1_MINT_OFFSET: usize = 200; // token_1_mint
+const TOKEN_0_PROGRAM_OFFSET: usize = 232; // token_0_program
+const TOKEN_1_PROGRAM_OFFSET: usize = 264; // token_1_program
+const OBSERVATION_KEY_OFFSET: usize = 296; // observation_key
 
-// Raydium AMM program ID
-pub const RAYDIUM_AMM_V4_PROGRAM_ID: &str = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
+#[derive(Debug)]
+pub struct RaydiumCpAmmInfo {
+    pub token_0_mint: Pubkey,
+    pub token_1_mint: Pubkey,
+    pub token_0_vault: Pubkey,
+    pub token_1_vault: Pubkey,
+    pub amm_config: Pubkey,
+    pub observation_key: Pubkey,
+}
 
-#[derive(Accounts)]
-pub struct RaydiumSwap<'info> {
-    /// CHECK: Validated by Raydium program
-    pub amm_id: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub amm_authority: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub amm_open_orders: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub pool_coin_token_account: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub pool_pc_token_account: AccountInfo<'info>,
-    /// CHECK: Serum program
-    pub serum_program_id: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_market: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_bids: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_asks: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_event_queue: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_coin_vault_account: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_pc_vault_account: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    pub serum_vault_signer: AccountInfo<'info>,
-    #[account(mut)]
-    pub user_source_token: Account<'info, TokenAccount>,
-    #[account(mut)]
-    pub user_destination_token: Account<'info, TokenAccount>,
-    pub user_authority: Signer<'info>,
-    pub token_program: Program<'info, Token>,
-    #[account(mut)]
-    pub swap_state: Account<'info, RaydiumSwapState>,
+impl RaydiumCpAmmInfo {
+    pub fn load_checked(data: &[u8]) -> Result<Self> {
+        if data.len() < OBSERVATION_KEY_OFFSET + 32 {
+            return Err(anyhow::anyhow!("Invalid data length for RaydiumCpAmmInfo"));
+        }
+        
+        let token_0_vault = Pubkey::new(&data[TOKEN_0_VAULT_OFFSET..TOKEN_0_VAULT_OFFSET + 32]);
+        let token_1_vault = Pubkey::new(&data[TOKEN_1_VAULT_OFFSET..TOKEN_1_VAULT_OFFSET + 32]);
+        let token_0_mint = Pubkey::new(&data[TOKEN_0_MINT_OFFSET..TOKEN_0_MINT_OFFSET + 32]);
+        let token_1_mint = Pubkey::new(&data[TOKEN_1_MINT_OFFSET..TOKEN_1_MINT_OFFSET + 32]);
+        let amm_config = Pubkey::new(&data[AMM_CONFIG_OFFSET..AMM_CONFIG_OFFSET + 32]);
+        let observation_key = Pubkey::new(&data[OBSERVATION_KEY_OFFSET..OBSERVATION_KEY_OFFSET + 32]);
+        
+        Ok(Self {
+            token_0_mint,
+            token_1_mint,
+            token_0_vault,
+            token_1_vault,
+            amm_config,
+            observation_key,
+        })
+    }
 }
 
 impl<'info> RaydiumSwap<'info> {
