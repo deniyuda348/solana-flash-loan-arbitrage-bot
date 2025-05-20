@@ -9,51 +9,174 @@ use crate::state::RaydiumSwapState;
 pub const RAYDIUM_AMM_V4_PROGRAM_ID: &str = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 #[derive(Accounts)]
-pub struct RaydiumSwap<'info> {
-    /// CHECK: Validated by Raydium program
-    pub amm_id: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub amm_authority: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub amm_open_orders: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub pool_coin_token_account: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub pool_pc_token_account: AccountInfo<'info>,
-    /// CHECK: Serum program
-    pub serum_program_id: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_market: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_bids: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_asks: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_event_queue: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_coin_vault_account: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    #[account(mut)]
-    pub serum_pc_vault_account: AccountInfo<'info>,
-    /// CHECK: Validated by Raydium program
-    pub serum_vault_signer: AccountInfo<'info>,
-    #[account(mut)]
-    pub user_source_token: Account<'info, TokenAccount>,
-    #[account(mut)]
-    pub user_destination_token: Account<'info, TokenAccount>,
-    pub user_authority: Signer<'info>,
-    pub token_program: Program<'info, Token>,
-    #[account(mut)]
-    pub swap_state: Account<'info, RaydiumSwapState>,
+pub struct RaydiumClmm<'info> {
+    pub bump: [u8; 1],
+    pub amm_config: Pubkey,
+    pub owner: Pubkey,
+
+    pub token_mint_0: Pubkey,
+    pub token_mint_1: Pubkey,
+
+    pub token_vault_0: Pubkey,
+    pub token_vault_1: Pubkey,
+
+    pub observation_key: Pubkey,
+
+    pub mint_decimals_0: u8,
+    pub mint_decimals_1: u8,
+
+    pub tick_spacing: u16,
+    pub liquidity: u128,
+    pub sqrt_price_x64: u128,
+    pub tick_current: i32,
+
+    pub padding3: u16,
+    pub padding4: u16,
+
+    pub fee_growth_global_0_x64: u128,
+    pub fee_growth_global_1_x64: u128,
+
+    pub protocol_fees_token_0: u64,
+    pub protocol_fees_token_1: u64,
+
+    pub swap_in_amount_token_0: u128,
+    pub swap_out_amount_token_1: u128,
+    pub swap_in_amount_token_1: u128,
+    pub swap_out_amount_token_0: u128,
+
+    pub status: u8,
+    pub padding: [u8; 7],
+
+    pub reward_infos: [RewardInfo; REWARD_NUM],
+
+    pub tick_array_bitmap: [u64; 16],
+
+    pub total_fees_token_0: u64,
+    pub total_fees_claimed_token_0: u64,
+    pub total_fees_token_1: u64,
+    pub total_fees_claimed_token_1: u64,
+
+    pub fund_fees_token_0: u64,
+    pub fund_fees_token_1: u64,
+
+    pub open_time: u64,
+    pub recent_epoch: u64,
+
+    pub padding1: [u64; 24],
+    pub padding2: [u64; 32],
+}
+
+impl RaydiumClmm {
+    pub fn load_checked(data: &[u8]) -> Result<Self> {
+        if data.len() < 8 + 32 + 32 + 32 + 32 + 32 + 32 + 4 + 2 {
+            return Err(anyhow::anyhow!(
+                "Invalid data length for RaydiumClmmPoolState"
+            ));
+        }
+
+        let data = &data[8..]; // Skip the discriminator
+        let mut offset = 0;
+
+        offset += 1;
+
+        let mut amm_config = [0u8; 32];
+        amm_config.copy_from_slice(&data[offset..offset + 32]);
+        let amm_config = Pubkey::new_from_array(amm_config);
+        offset += 32;
+
+        offset += 32;
+
+        let mut token_mint_0 = [0u8; 32];
+        token_mint_0.copy_from_slice(&data[offset..offset + 32]);
+        let token_mint_0 = Pubkey::new_from_array(token_mint_0);
+        offset += 32;
+
+        let mut token_mint_1 = [0u8; 32];
+        token_mint_1.copy_from_slice(&data[offset..offset + 32]);
+        let token_mint_1 = Pubkey::new_from_array(token_mint_1);
+        offset += 32;
+
+        let mut token_vault_0 = [0u8; 32];
+        token_vault_0.copy_from_slice(&data[offset..offset + 32]);
+        let token_vault_0 = Pubkey::new_from_array(token_vault_0);
+        offset += 32;
+
+        let mut token_vault_1 = [0u8; 32];
+        token_vault_1.copy_from_slice(&data[offset..offset + 32]);
+        let token_vault_1 = Pubkey::new_from_array(token_vault_1);
+        offset += 32;
+
+        let mut observation_key = [0u8; 32];
+        observation_key.copy_from_slice(&data[offset..offset + 32]);
+        let observation_key = Pubkey::new_from_array(observation_key);
+        offset += 32;
+
+        offset += 2;
+
+        let mut tick_spacing_bytes = [0u8; 2];
+        tick_spacing_bytes.copy_from_slice(&data[offset..offset + 2]);
+        let tick_spacing = u16::from_le_bytes(tick_spacing_bytes);
+        offset += 2;
+
+        offset += 16;
+
+        // Skip sqrt_price_x64
+        offset += 16;
+
+        let mut tick_current_bytes = [0u8; 4];
+        tick_current_bytes.copy_from_slice(&data[offset..offset + 4]);
+        let tick_current = i32::from_le_bytes(tick_current_bytes);
+        offset += 4;
+
+        Ok(Self {
+            amm_config,
+            token_mint_0,
+            token_mint_1,
+            token_vault_0,
+            token_vault_1,
+            observation_key,
+            tick_spacing,
+            tick_current,
+            ..Default::default()
+        })
+    }
+}
+
+pub fn compute_tick_array_start_index(tick: i32, tick_spacing: u16) -> i32 {
+    let ticks_in_array = TICK_ARRAY_SIZE * tick_spacing as i32;
+    let mut start = tick / ticks_in_array;
+    if tick < 0 && tick % ticks_in_array != 0 {
+        start = start - 1
+    }
+    start * ticks_in_array
+}
+
+pub fn get_tick_array_pubkeys(
+    pool_pubkey: &Pubkey,
+    tick_current: i32,
+    tick_spacing: u16,
+    offsets: &[i32],
+    raydium_clmm_program_id: &Pubkey,
+) -> Result<Vec<Pubkey>> {
+    let mut result = Vec::with_capacity(offsets.len());
+    let ticks_in_array = TICK_ARRAY_SIZE * tick_spacing as i32;
+
+    for &offset in offsets {
+        let base_start_index = compute_tick_array_start_index(tick_current, tick_spacing);
+
+        let offset_start_index = base_start_index + offset * ticks_in_array;
+
+        let seeds = &[
+            TICK_ARRAY_SEED.as_bytes(),
+            pool_pubkey.as_ref(),
+            &offset_start_index.to_be_bytes(),
+        ];
+
+        let (pubkey, _) = Pubkey::find_program_address(seeds, raydium_clmm_program_id);
+        result.push(pubkey);
+    }
+
+    Ok(result)
 }
 
 impl<'info> RaydiumSwap<'info> {
