@@ -7,36 +7,6 @@ This Solana Arbitrage Bot implements advanced strategies for detecting and execu
 This is solana flash loan arbitrage bot transaction.(https://solscan.io/tx/2BK4cMrPpmFPDbvwqTWV4Gqgt3Z7hmfi7eszphgdxHAppUVNSWN7uRLnVv6SR82NskUxhK8vdyEEgQGmmQa3MvqH)
 flash loan transaction (https://solscan.io/tx/UjVogBra5oCpPkBHmDxbgev3BBUZrWteFSH3K6rGeJc12MPJjCnZc7WQNbg8NuuvXmQuT5Mi7RBCmk6syiPsnDn)
 
-## jito bundle and flash loan
-
-## On-Chain Arbitrage Limitations
-
-Important note: On-chain arbitrage programs face several limitations and risks:
-
-1. **MEV Competition**
-   - Searchers and validators can front-run transactions
-   - Transaction ordering can be manipulated
-   - Limited control over execution timing
-
-2. **Technical Constraints**
-   - Compute unit limitations for complex calculations
-   - Transaction size limits for multi-hop trades
-   - Higher latency compared to off-chain solutions
-
-3. **Recommended Approach**
-   - Use off-chain arbitrage detection
-   - Submit transactions through MEV-aware RPC providers
-   - Consider integrating with Jito-MEV for better execution
-
-4. **Alternative Architecture**
-   ```mermaid
-   graph TD
-       A[Off-chain Monitor] --> B[Price Analysis]
-       B --> C[Opportunity Detection]
-       C --> D[Transaction Builder]
-       D --> E[MEV-aware RPC]
-       E --> F[Validator Network]
-   ```
 
 The original implementation should be considered as educational material rather than a production-ready solution. For real-world arbitrage:
 
